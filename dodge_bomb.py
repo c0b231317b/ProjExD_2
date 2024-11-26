@@ -24,6 +24,15 @@ def check_bound(rct: pg.Rect) -> tuple[bool, bool]:
     return yoko, tate
 
 
+# def init_bb_imgs() -> tuple[list[pg.Surface], list[int]]:
+#     """
+#     サイズの異なる爆弾Surfaceを要素としたリストと加速度リストを返す
+#     引数：なし
+#     戻り値：爆弾タプル
+#     """
+
+
+
 def game_over(screen: pg.Surface) -> None:
     """
     ゲームオーバー時に，半透明の黒い画面上に「Game Over」と表示し，    泣いているこうかとん画像を貼り付ける関数
@@ -71,6 +80,12 @@ def main():
         pg.K_LEFT : (-5, 0),
         pg.K_RIGHT : (5, 0),
     }
+    # # 爆弾のサイズ変更 関数
+    # bb_imgs, bb_accs = init_bb_imgs()
+    # avx = vx*bb_accs[min(tmr//500, 9)]
+    # bb_img = bb_imgs[min(tmr//500, 9)]
+
+
 
     while True:
         for event in pg.event.get():
