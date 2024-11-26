@@ -8,6 +8,21 @@ WIDTH, HEIGHT = 1100, 650
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 
+def check_bound(rct: pg.Rect) -> tuple[bool, bool]:
+    """
+    引数で与えられたrectが画面内か外かを判定する
+    引数：こうかとんRect or 爆弾Rect
+    戻り値：横方向・縦方向の真理値タプル（True：画面内／False：画面外）
+    """
+    yoko = True
+    tate = True
+    if rct.left < 0 or WIDTH < rct.right:
+        yoko = False
+    if rct.top < 0 or HEIGHT < rct.bottom:
+        tate = False
+    return yoko, tate
+
+
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
@@ -38,6 +53,7 @@ def main():
         for event in pg.event.get():
             if event.type == pg.QUIT: 
                 return
+        # if kk_rct.colliderect()
         screen.blit(bg_img, [0, 0]) 
 
         key_lst = pg.key.get_pressed()
@@ -47,8 +63,18 @@ def main():
                 sum_mv[0] += tpl[0]
                 sum_mv[1] += tpl[1]
         kk_rct.move_ip(sum_mv)
+        # pr_3  こうかとんが画面内に閉じ込める
+        if check_bound(kk_rct) != (True, True):
+            kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
         screen.blit(bb_img, bb_rct)
         bb_rct.move_ip(vx, vy)
+        
+        # pr_3 爆弾　画面内
+        yoko, tate = check_bound(bb_rct)
+        if not yoko:
+            vx *= -1
+        if not tate:
+            vy *= -1
         screen.blit(kk_img, kk_rct)
         pg.display.update()
         tmr += 1
@@ -60,3 +86,4 @@ if __name__ == "__main__":
     main()
     pg.quit()
     sys.exit()
+
